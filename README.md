@@ -49,6 +49,8 @@ To use the fraud detection model, follow these steps:
 6. Evaluate the model's performance on test data using metrics like accuracy, precision, recall, F1-score, and ROC curve.
 7. Optionally, tune hyperparameters for better model performance.
 
+Note: Examples of using the package are available in the notebooks (Step1.ipynb, Step2_3.ipynb, and Step2_3_4.ipynb)
+
 ## 4. Code Overview
 
 The code is organized into different methods and classes, each serving a specific purpose in the fraud detection pipeline. Here's an overview of the main components:
