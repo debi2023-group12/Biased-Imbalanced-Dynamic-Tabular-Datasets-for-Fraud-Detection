@@ -52,11 +52,16 @@ To use the fraud detection model, follow these steps:
 
 The code is organized into different methods and classes, each serving a specific purpose in the fraud detection pipeline. Here's an overview of the main components:
 
-Bank_Account_Fraud_Detection: The main class responsible for preprocessing, training, evaluating, and tuning the fraud detection model.
-Preprocessing: Methods to handle missing values, perform feature engineering, one-hot encoding, and standard scaling.
-Model Training: Methods to train the model using Logistic Regression, XGBoost, Random Forest, GBM, and Deep Neural Network.
-Evaluation: Methods to evaluate the model's performance, including confusion matrix, ROC curve, and various metrics.
-EDA: Method for exploritory data analysis
+#### Bank_Account_Fraud_Detection: 
+The main class responsible for preprocessing, training, evaluating, and tuning the fraud detection model.
+#### Preprocessing: 
+Methods to handle missing values, perform feature engineering, one-hot encoding, and standard scaling.
+#### Model Training: 
+Methods to train the model using Logistic Regression, XGBoost, Random Forest, GBM, and Deep Neural Network.
+#### Evaluation: 
+Methods to evaluate the model's performance, including confusion matrix, ROC curve, and various metrics.
+#### EDA: 
+Method for exploritory data analysis
 
 ### 5. Methods
 
