@@ -86,13 +86,7 @@ def contact_validity(row):
         return 1  # At least one contact phone or mobile has a number
     else:
         return 0  # Both contact phones and mobiles have no number
-    
-def plot_all_roc(fprs_list, tprs_list, model_names):
 
-    # Plot all ROC curves together in one figure
-    plt.figure(figsize=(10, 6))
-    for fprs, tprs, NameModel in zip(fprs_list, tprs_list, model_names):
-        plt.plot(fprs, tprs, label=NameModel)
 
 def get_fairness_metrics(
     y_true, y_pred, groups, FIXED_FPR=0.05):
@@ -244,7 +238,7 @@ class Bank_Account_Fraud_Detection:
     # Function to split the dataset into train and test sets
     def train_test_split(self):
 
-        if self.dataset.empty:
+        if self.dataset.size == 0:
             self.dataset = self.load_data()
             self.preprocessed = self.preprocess()
             
@@ -276,7 +270,7 @@ class Bank_Account_Fraud_Detection:
     # Function to one-hot-encode the categorical features
     def one_hot_encoder(self):
 
-        if self.X_train.empty:
+        if self.X_train.size == 0:
             self.train_test_split()
             
         if self.one_hot == 1:
@@ -293,29 +287,34 @@ class Bank_Account_Fraud_Detection:
             # Get one-hot-encoded columns
             ohe_cols_train = pd.DataFrame(ohe.fit_transform(self.X_train[object_cols]))
             ohe_cols_test = pd.DataFrame(ohe.transform(self.X_test[object_cols]))
-    
+            ohe_cols = pd.DataFrame(ohe.transform(self.preprocessed[object_cols]))
+
             # Set the index of the transformed data to match the original data
             ohe_cols_train.index = self.X_train.index
             ohe_cols_test.index = self.X_test.index
+            ohe_cols.index = self.preprocessed.index
     
             # Remove the object columns from the training and test data
             num_X_train = self.X_train.drop(object_cols, axis=1)
             num_X_test = self.X_test.drop(object_cols, axis=1)
+            num_X = self.preprocessed.drop(object_cols, axis=1)
     
             # Concatenate the numerical data with the transformed categorical data
             self.X_train = pd.concat([num_X_train, ohe_cols_train], axis=1)
             self.X_test = pd.concat([num_X_test, ohe_cols_test], axis=1)
+            self.preprocessed = pd.concat([num_X, ohe_cols], axis=1)
     
             # Newer versions of sklearn require the column names to be strings
             self.X_train.columns = self.X_train.columns.astype(str)
             self.X_test.columns = self.X_test.columns.astype(str)
+            self.preprocessed.columns = self.preprocessed.columns.astype(str)
             
             self.one_hot = 1
 
     
     def standard_scaler(self):
 
-        if self.X_train.empty:
+        if self.X_train.size == 0:
             self.train_test_split()
 
         if self.std_scale == 1:
@@ -405,7 +404,7 @@ class Bank_Account_Fraud_Detection:
 
     def preprocess(self, option='baseline', fet_eng=False):
 
-        if self.dataset.empty:
+        if self.dataset.size == 0:
             self.dataset = self.load_data()
 
         if option == 'baseline':
@@ -492,12 +491,12 @@ class Bank_Account_Fraud_Detection:
 
             cat_columns = self.preprocessed.select_dtypes(include='object').columns
             
-            self.preprocessed = pd.get_dummies(self.preprocessed, columns=cat_columns, drop_first=True)
+            self.preprocessed = pd.get_dummies(self.preprocessed)
             self.train_test_split()
-            self.one_hot_encoder()        
-            self.standard_scaler()
             self.X_train.drop(['customer_age'], axis=1, inplace=True)
             self.X_test.drop(['customer_age'], axis=1, inplace=True)
+            self.one_hot_encoder()        
+            self.standard_scaler()
 
         elif option == 'option2':
             self.preprocessed = pd.get_dummies(self.dataset)
@@ -512,7 +511,7 @@ class Bank_Account_Fraud_Detection:
 
     def EDA(self, insight):
 
-        if self.dataset.empty:
+        if self.dataset.size == 0:
             self.dataset = self.load_data()
 
         if insight == 'frauds':
@@ -534,7 +533,7 @@ class Bank_Account_Fraud_Detection:
         
         elif insight == 'missing_counts':
             
-            if self.preprocessed.empty:
+            if self.preprocessed.size == 0:
                 missing_values_count = self.dataset.isnull().sum()
             
                 print(missing_values_count)
@@ -547,7 +546,7 @@ class Bank_Account_Fraud_Detection:
         
         elif insight == 'missingno':
             
-            if self.preprocessed.empty:
+            if self.preprocessed.size == 0:
                 msno.matrix(self.dataset)
             
                 plt.show
@@ -559,7 +558,7 @@ class Bank_Account_Fraud_Detection:
 
         elif insight == 'correlations':
             
-            if self.preprocessed.empty:
+            if self.preprocessed.size == 0:
             
                 object_columns = self.dataset.select_dtypes(include='object').columns
     
@@ -663,10 +662,18 @@ class Bank_Account_Fraud_Detection:
             print('1. frauds\n2. missing_counts\n3. missingno\n4. correlations\n5. skewness\n6. description\n7. info')
 
 
+        
+    def plot_all_roc(self, fprs_list, tprs_list, model_names):
+    
+        # Plot all ROC curves together in one figure
+        plt.figure(figsize=(10, 6))
+        for fprs, tprs, NameModel in zip(fprs_list, tprs_list, model_names):
+            plt.plot(fprs, tprs, label=NameModel)
+
     
     def handle_imbalance(self, method):
 
-        if self.X_train.empty:
+        if self.X_train.size == 0:
             self.train_test_split()
 
         if method == 'NearMiss':
@@ -1011,5 +1018,3 @@ class Bank_Account_Fraud_Detection:
 
         fpr, tpr, _ = roc_curve(self.y_test, pred)
         plot_roc(fpr, tpr, 'GBM')
-
-    
