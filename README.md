@@ -43,13 +43,13 @@ To use the fraud detection model, follow these steps:
 1. Download the dataset from this link: https://www.kaggle.com/datasets/sgpjesus/bank-account-fraud-dataset-neurips-2022.
 1. Clone the repository to your local machine.
 2. Import the 'FraudDetectionModel' class from the provided Python script into your code.
-3. Instantiate the 'FraudDetectionModel' class and load your dataset into it. Please, make sure you enter the dataset path correctly.
+3. Instantiate the 'FraudDetectionModel' class and load your dataset into it. Please, make sure you adjust the dataset path correctly.
 4. Choose the desired preprocessing option (e.g., 'baseline', 'option1', 'option2') to handle missing values, feature engineering, and other preprocessing tasks.
 5. Train the model using one of the available algorithms (Logistic Regression, XGBoost, Random Forest, GBM, or Deep Neural Network).
 6. Evaluate the model's performance on test data using metrics like accuracy, precision, recall, F1-score, and ROC curve.
 7. Optionally, tune hyperparameters for better model performance.
 
-Note: Examples of using the package are available in the notebooks (Step1.ipynb, Step2_3.ipynb, and Step2_3_4.ipynb)
+Note: Examples of using the package are available in the notebooks (Step1.ipynb, Step2_3.ipynb, Step2_3_4.ipynb, Step2_with_Preprocessing__on_BaselineModelsROC_&_on__Step1.ipynb, and Step2_without__Preprocessing__BaselineModelsROC.ipynb)
 
 ## 4. Code Overview
 
